@@ -1,0 +1,6 @@
+import './components/page.js'
+import './components/header-component.js'
+import './components/title-component.js'
+import './components/menu-component.js'
+import './components/font-loader-component.js'
+import './components/home-button-component.js'

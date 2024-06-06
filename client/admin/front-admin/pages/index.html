@@ -1,0 +1,31 @@
+<header>
+  <title-component title="Clientes"></title-component>
+  <title-menu></title-menu>
+</header>
+<main>
+  <filter-component></filter-component>
+  <modal-destroy-component endpoint="/api/admin/users"></modal-destroy-component>
+  <div class="crud">
+    <section class="table">
+      <table-component endpoint="/api/admin/users"></table-component>
+    </section>
+    <section class="form">
+      <form-component endpoint="/api/admin/users">
+        <upload-image-button slot="upload-image-button" name="featured-image" type="single" image-configuration='
+          {
+            "xs":{"widthPx":"60",
+                  "heightPx":"60"},
+            "sm":{"widthPx":"80",
+                  "heightPx":"80"},
+            "md":{"widthPx":"1200",
+                  "heightPx":"1200"},
+            "lg":{"widthPx":"900",
+                  "heightPx":"600"}
+          }'></upload-image-button>
+      </form-component>
+      <upload-image-form endpoint="/api/admin/images"></upload-image-form>
+      <save-modal-component>
+      </save-modal-component>
+    </section>
+  </div>
+</main>

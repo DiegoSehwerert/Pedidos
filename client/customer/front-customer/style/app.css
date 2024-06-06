@@ -1,0 +1,58 @@
+:root {
+  --light-pink: hsl(273, 98%, 60%);
+}
+
+a {
+  text-decoration: none;
+  }
+  
+
+  ul {
+  list-style: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+  color: hsl(0, 0%, 100%);
+  font-family: 'Roboto', sans-serif;
+  }
+
+  input,
+  label,
+  select,
+  textarea,
+  li,
+  span,
+  p {
+  color: hsl(0, 0%, 100%);
+  font-family: 'Roboto', sans-serif;
+  }
+
+header{
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem
+}
+
+body{
+  background-color: hsl(226, 63%, 45%);
+  margin: 0 auto;
+}
+
+.crud {
+  display: flex;
+  gap: 5%;
+  justify-content: space-between;
+}
+
+.table {
+  flex: 1;
+}
+.form {
+  flex: 2;
+}

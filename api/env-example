@@ -1,0 +1,13 @@
+API_URL="http://dev-pedidos.com"
+DATABASE_HOST="localhost"
+DATABASE_DIALECT="mysql"
+DATABASE_USER="root"
+DATABASE_PASSWORD="password"
+DATABASE_NAME="games"
+MONGODB_URI='mongodb://localhost:27017/games'
+REDIS_URL=redis://localhost:6379
+JWT_SECRET= secreto
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REFRESH_TOKEN=
+NODE_ENV=development
