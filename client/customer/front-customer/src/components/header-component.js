@@ -1,8 +1,7 @@
-class HeadersComponent extends HTMLElement {
+class Header extends HTMLElement {
   constructor () {
     super()
     this.attachShadow({ mode: 'open' })
-    this.title = this.getAttribute('title-name')
   }
 
   connectedCallback () {
@@ -17,28 +16,23 @@ class HeadersComponent extends HTMLElement {
             padding: 0;
             box-sizing: border-box;
           }
-          .container{
+
+          header{
             width: 100%;
-            max-height: 10vh;
-            min-height: 10vh;
+            max-height: 8vh;
             background-color: black;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            padding: 1rem 2rem;
           }
         </style>
-        <div class="container">
-          <slot name="title-component">
-            <title-component title=${this.title} ></title-component>
-          </slot>
-          <slot name="home-button-component">
-            <home-button-component></home-button-component>
-          </slot>
-        </div>
+        <header>
+          <slot></slot>
+        </header>
 
       `
   }
 }
 
-customElements.define('header-component', HeadersComponent)
+customElements.define('header-component', Header)

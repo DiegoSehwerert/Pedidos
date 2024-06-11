@@ -1,4 +1,4 @@
-class MenuComponent extends HTMLElement {
+class Menu extends HTMLElement {
   constructor () {
     super()
     this.attachShadow({ mode: 'open' })
@@ -11,53 +11,43 @@ class MenuComponent extends HTMLElement {
   render () {
     this.shadowRoot.innerHTML = /* html */`
         <style>
-          .container{
-            width: 100%;
-            max-height: 90vh;
-            min-height: 90vh;
-            background-color: var(--light-pink);
+          a {
+            color: inherit;      /* Hereda el color del texto del elemento padre */
+            text-decoration: none; /* Elimina el subrayado */
+            background-color: transparent; /* Hace que el fondo sea transparento */
+            cursor: pointer;
+            padding: 1rem; 
+          }
+          .menu{
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            gap: 3rem;
+            gap: 2rem;
           }
-          .new-buy{
-            width: 50%;
-            height: 50%;
-            background-color: white;
+          .menu-item{
+            background-color: hsl(0, 0%, 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 30px;
           }
-          .new-buy span{
-            padding: 1rem;
-          }
-          .older-buys{
-            width: 50%;
-            height: 50%;
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 30px;
-          }
-          .older-buys span{
-            padding: 1rem;
+
+          span{
+            font-family: "Roboto", sans-serif;
+            font-weight: 700;
+           
           }
         </style>
-        <div class="container">
-          <div class="new-buy">
-            <span>Nuevo pedido</span>
+        <section class="menu">
+          <div class="menu-item">
+            <a href="/cliente/nuevo-pedido"><span>Nuevo pedido</span></a>
           </div>
-          <div class="older-buys">
-            <span>Pedidos anteriores</span>
+          <div class="menu-item">
+            <a href="/cliente/pedidos-anteriores"><span>Pedidos anteriores</span></a>
           </div>
-        </div>
+        </section>
 
       `
   }
 }
 
-customElements.define('menu-component', MenuComponent)
+customElements.define('menu-component', Menu)
