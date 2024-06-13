@@ -1,5 +1,6 @@
 import { store } from '../redux/store' // Importa el store de Redux
-import { addItemToCart, removeItemFromCart } from '../redux/cart-slice'
+import { updateCart } from '../redux/cart-slice'
+import { showOrderComponent } from '../redux/show-order-component'
 
 class Products extends HTMLElement {
   constructor () {
@@ -16,7 +17,7 @@ class Products extends HTMLElement {
   async loadData () {
     this.data = [
       {
-        id: 1,
+        id: 2,
         title: 'Cocacola',
         price: 90,
         unities: 16,
@@ -24,7 +25,7 @@ class Products extends HTMLElement {
         measurementWeight: 'ml'
       },
       {
-        id: 2,
+        id: 3,
         title: 'Cocacola zero',
         price: 90,
         unities: 16,
@@ -40,7 +41,7 @@ class Products extends HTMLElement {
 
           :host{
             height: 100%;
-            width: 100%;  
+            width: 100%; 
           }
 
           *{
@@ -48,6 +49,7 @@ class Products extends HTMLElement {
             padding: 0;
             box-sizing: border-box;
             font-family: "Roboto", sans-serif;
+            Z-index: 1;
           }
 
           .products{
@@ -114,32 +116,13 @@ class Products extends HTMLElement {
             height: 100%;
             padding: 0.3rem 1rem;
           }
-
-          .order-button{
-            display: flex;
-            justify-content: center;
-            width: 100%;
-          }
-          
-          .order-button button{
-            background-color: hsl(0, 0%, 100%);
-            border: none;
-            border-radius: 30px;
-            font-family: "Roboto", sans-serif;
-            font-weight: 700;
-            outline: none;
-            padding: 1rem;
-            width: 80%;
-          }
         </style>
 
         <section class="products">
          
         </section>
 
-        <div class="order-button">
-          <button>Ver pedido</button>
-        </div>
+        
     `
 
     const products = this.shadowRoot.querySelector('.products')
@@ -202,18 +185,34 @@ class Products extends HTMLElement {
       plusMinusButton.appendChild(plusButton)
     })
 
-    const button = this.shadowRoot.querySelector('.plus-minus-container')
-    button.addEventListener('click', (event) => {
-      const buttonClicked = event.target.closest('.plus-minus-button')
-      if (buttonClicked) {
-        const span = buttonClicked.querySelector('span')
-        if (span.textContent === '+') {
-          store.dispatch(addItemToCart())
-          // Realiza acciones si el span es '+'
-        } else if (span.textContent === '-') {
-          store.dispatch(removeItemFromCart())
-          // Realiza acciones si el span es '-'
+    products.addEventListener('click', event => {
+      if (event.target.closest('.plus-minus-button')) {
+        const grandParentElement = event.target.closest('.plus-minus-button').parentElement.parentElement.parentElement
+        const productElements = Array.from(grandParentElement.querySelectorAll('.product'))
+        const clickedProduct = event.target.closest('.product')
+        const clickedProductIndex = productElements.indexOf(clickedProduct)
+        const matchingData = this.data[clickedProductIndex]
+        const plusButton = event.target.closest('.plus-minus-button button').textContent === '+'
+        const minusButton = event.target.closest('.plus-minus-button button').textContent === '-'
+
+        // Obtén el elemento que muestra la cantidad
+        const quantityElement = clickedProduct.querySelector('.plus-minus-quantity span')
+
+        if (plusButton) {
+          quantityElement.textContent = parseInt(quantityElement.textContent) + 1
         }
+        if (minusButton) {
+          if (parseInt(quantityElement.textContent) > 0) {
+            quantityElement.textContent = parseInt(quantityElement.textContent) - 1
+          }
+        }
+
+        const matchingDataCopy = Object.assign({}, matchingData)
+
+        // Actualiza la propiedad quantity en la copia de matchingData con el nuevo valor
+        matchingDataCopy.quantity = parseInt(quantityElement.textContent)
+
+        store.dispatch(updateCart(matchingDataCopy))
       }
     })
   }

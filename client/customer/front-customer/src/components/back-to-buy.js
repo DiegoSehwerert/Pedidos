@@ -27,4 +27,4 @@ class BackToBuyButton extends HTMLElement {
   }
 }
 
-customElements.define('back-to-buy-component', BackToBuyButton)
+customElements.define('back-button-component', BackToBuyButton)

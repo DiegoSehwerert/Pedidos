@@ -1,58 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-const initialState = {
-  items: [], // Array para almacenar los productos en el carrito
-  totalAmount: 0, // Monto total del carrito
-  totalQuantity: 0 // Cantidad total de productos en el carrito
-}
-
-const cartSlice = createSlice({
+export const cartSlice = createSlice({
   name: 'cart',
-  initialState,
+  initialState: {
+    cartProducts: []
+  },
   reducers: {
-    addItemToCart (state, action) {
-      const newItem = action.payload
-      const existingItem = state.items.find(item => item.id === newItem.id)
+    updateCart: (state, action) => {
+      const productExists = state.cartProducts.find(product => product.id === action.payload.id)
 
-      state.totalQuantity++
-      if (!existingItem) {
-        state.items.push({
-          id: newItem.id,
-          price: newItem.price,
-          quantity: 1,
-          totalPrice: newItem.price,
-          name: newItem.name
-        })
+      if (productExists) {
+        state.cartProducts = state.cartProducts.map(product => {
+          if (product.id === action.payload.id) {
+            if (parseInt(action.payload.quantity) === 0 || action.payload.quantity < 0) {
+              return null
+            } else {
+              return {
+                ...product,
+                ...action.payload
+              }
+            }
+          } else {
+            return product
+          }
+        }).filter(Boolean)
       } else {
-        existingItem.quantity++
-        existingItem.totalPrice += newItem.price
+        state.cartProducts.push(action.payload)
       }
-      state.totalAmount += newItem.price
-      console.log('Updated cart state:', JSON.stringify(state, null, 2))
-    },
-    removeItemFromCart (state, action) {
-      const id = action.payload
-      const existingItem = state.items.find(item => item.id === id)
-
-      state.totalQuantity--
-      if (existingItem.quantity === 1) {
-        state.items = state.items.filter(item => item.id !== id)
-      } else {
-        existingItem.quantity--
-        existingItem.totalPrice -= existingItem.price
-      }
-      state.totalAmount -= existingItem.price
-      console.log('Updated cart state:', JSON.stringify(state, null, 2))
-    },
-    clearCart (state) {
-      state.items = []
-      state.totalAmount = 0
-      state.totalQuantity = 0
-      console.log('Cart state after clearing:', JSON.stringify(state, null, 2))
     }
   }
 })
 
-export const { addItemToCart, removeItemFromCart, clearCart } = cartSlice.actions
+export const { updateCart } = cartSlice.actions
 
 export default cartSlice.reducer

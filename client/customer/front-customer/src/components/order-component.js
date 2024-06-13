@@ -1,90 +1,47 @@
+import isEqual from 'lodash-es/isEqual'
+import { store } from '../redux/store' // Importa el store de Redux
+import { showOrderComponent } from '../redux/show-order-component'
+// import { showCheckout } from '../redux/show-checkout'
+
 class Order extends HTMLElement {
   constructor () {
     super()
     this.attachShadow({ mode: 'open' })
     this.data = []
+    this.unsubscribe = null
   }
 
-  async connectedCallback () {
-    await this.loadData()
-    await this.render()
+  connectedCallback () {
+    this.render()
+    this.unsubscribe = store.subscribe(() => {
+      this.updateVisibility()
+      this.updateCart()
+    })
   }
 
-  async loadData () {
-    this.data = [
-      {
-        id: 1,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 2,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 1,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 2,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 1,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 2,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 1,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 2,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        quantity: 2,
-        measurementWeight: 'ml'
-      }
-    ]
+  disconnectedCallback () {
+    if (this.unsubscribe) {
+      this.unsubscribe()
+    }
+  }
+
+  updateVisibility () {
+    const state = store.getState()
+    if (state.orderComponent.orderComponentVisible) {
+      this.shadowRoot.querySelector('.order').classList.add('active')
+    } else {
+      this.shadowRoot.querySelector('.order').classList.remove('active')
+    }
+  }
+
+  updateCart () {
+    const currentState = store.getState()
+    console.log(currentState.cartProducts)
+
+    if (!isEqual(currentState.cart.cartProducts, this.data)) {
+      this.data = currentState.cart.cartProducts
+      this.renderOrder(this.data)
+    }
   }
 
   render () {
@@ -93,7 +50,7 @@ class Order extends HTMLElement {
 
           :host{
             height: 100%;
-            width: 100%;  
+            width: 100%;
           }
 
           *{
@@ -103,22 +60,50 @@ class Order extends HTMLElement {
             font-family: "Roboto", sans-serif;
           }
 
-          .order{ 
+          .header{
+            width: 100%;
+            max-height: 8vh;
+            background-color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+          }
+
+          .back-button{
+            width: 2rem;
+            height: 2rem;
+            fill: white;
+            cursor: pointer;
+          }
+
+          .order{
+            background-color:hsl(226, 63%, 45%);
             display: flex;
             flex-direction: column;
             gap: 2rem;
             height: 100%;
-            max-height: 100%;
-            width: 100%;
+            position: fixed;
+            overflow: hidden;
+            top: 0;
+            right: -${window.innerWidth}px;
+            width: ${window.innerWidth}px;
+            transition: right 0.5s; 
+            z-index: 5000;
+          }
+
+          .order.active{
+            right: 0;
           }
 
           .products{
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            height: 80%;
-            max-height: 80%;
+            height: 64%;
+            max-height: 64%;
             overflow-y: scroll;
+            padding: 1rem 2rem;
             width: 100%;
           }
 
@@ -157,6 +142,7 @@ class Order extends HTMLElement {
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             width: 100%;
+            padding: 0 2rem;
           }
 
           .checkout-button{
@@ -188,9 +174,43 @@ class Order extends HTMLElement {
           .total span{
             font-size: 1.5rem;
           }
-        </style>
 
+          .total-price{
+            grid-column: 2 / -1;
+            text-align: right;
+          }
+
+          .total-price span{
+            font-size: 1.5rem;
+          }
+          
+          .order-button{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            top: 20rem;
+            position: relative;
+          }
+
+          .order-button button{
+            background-color: hsl(0, 0%, 100%);
+            border: none;
+            border-radius: 30px;
+            font-family: "Roboto", sans-serif;
+            font-weight: 700;
+            outline: none;
+            padding: 1rem;
+            width: 80%;
+          }
+        </style>
+       
         <section class="order">
+          <div class="header">
+            <title-component title="Pedidos" element="h1" font-size="1.5rem" color="hsl(0, 0%, 100%)"></title-component>
+            <div class="back-button">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>keyboard-backspace</title><path d="M21,11H6.83L10.41,7.41L9,6L3,12L9,18L10.41,16.58L6.83,13H21V11Z" /></svg>
+            </div>
+          </div>
           <div class="products">
           
           </div>
@@ -208,12 +228,31 @@ class Order extends HTMLElement {
           </div>
 
           <div class="checkout-button">
-            <button>Finalizar pedido</button>
+            <button>Ver pedido</button>
           </div>
         </section>
+        <div class="order-button">
+          <button>Ver pedido</button>
+        </div>
     `
 
+    const orderButton = this.shadowRoot.querySelector('.order-button button')
+    orderButton.addEventListener('click', () => {
+      store.dispatch(showOrderComponent())
+    })
+
+    const checkoutButton = this.shadowRoot.querySelector('.checkout-button button')
+    checkoutButton.addEventListener('click', () => {
+
+    })
+  }
+
+  renderOrder () {
     const products = this.shadowRoot.querySelector('.products')
+    products.innerHTML = ''
+    const total = this.data.reduce((acc, product) => acc + product.price * product.quantity, 0)
+    const totalElement = this.shadowRoot.querySelector('.total-price span')
+    totalElement.textContent = `${total}€`
 
     this.data.forEach(product => {
       const productContainer = document.createElement('div')
