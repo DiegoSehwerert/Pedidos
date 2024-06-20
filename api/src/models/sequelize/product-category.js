@@ -1,32 +1,17 @@
 module.exports = function (sequelize, DataTypes) {
   const ProductCategory = sequelize.define('ProductCategory', {
     id: {
-      type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true,
-      allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Por favor, rellena el campo "name".'
-        },
-        notEmpty: {
-          msg: 'Por favor, introduce un valor para el campo "name".'
-        }
-      }
-    },
-    visible: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Por favor, rellena el campo "visible".'
-        },
-        notEmpty: {
-          msg: 'Por favor, introduce un valor para el campo "visible".'
+          msg: 'Por favor, rellena el campo "Nombre".'
         }
       }
     },
@@ -64,8 +49,7 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   ProductCategory.associate = function (models) {
-    ProductCategory.hasMany(models.ProductCategoryRelation, { as: 'productCategoryRelations', foreignKey: 'productCategoryId' })
-    ProductCategory.belongsToMany(models.Product, { through: models.ProductCategoryRelation, as: 'products', foreignKey: 'productCategoryId' })
+    ProductCategory.hasMany(models.Product, { as: 'products', foreignKey: 'productCategoryId' })
   }
 
   return ProductCategory

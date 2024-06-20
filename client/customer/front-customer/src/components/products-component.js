@@ -6,7 +6,6 @@ class Products extends HTMLElement {
   constructor () {
     super()
     this.attachShadow({ mode: 'open' })
-    this.data = []
   }
 
   async connectedCallback () {
@@ -15,24 +14,10 @@ class Products extends HTMLElement {
   }
 
   async loadData () {
-    this.data = [
-      {
-        id: 2,
-        title: 'Cocacola',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        measurementWeight: 'ml'
-      },
-      {
-        id: 3,
-        title: 'Cocacola zero',
-        price: 90,
-        unities: 16,
-        weight: 330,
-        measurementWeight: 'ml'
-      }
-    ]
+    const response = await fetch(`${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}`)
+    const data = await response.json()
+    this.data = data
+    console.log('products', data)
   }
 
   render () {
@@ -131,55 +116,58 @@ class Products extends HTMLElement {
       const productContainer = document.createElement('div')
       productContainer.classList.add('product')
       products.appendChild(productContainer)
-
+    
       const titleContainer = document.createElement('div')
       titleContainer.classList.add('product-title')
       productContainer.appendChild(titleContainer)
-
+    
       const title = document.createElement('h3')
-      title.textContent = product.title
+      title.textContent = product.name
       titleContainer.appendChild(title)
-
+    
       const priceContainer = document.createElement('div')
       priceContainer.classList.add('product-price')
       productContainer.appendChild(priceContainer)
-
-      const price = document.createElement('span')
-      price.textContent = `${product.price}€`
-      priceContainer.appendChild(price)
-
+    
+      // Asegúrate de que el producto tenga un precio
+      if (product.price) {
+        const price = document.createElement('span')
+        price.textContent = `${product.price.basePrice}€`
+        priceContainer.appendChild(price)
+      }
+    
       const specificationsContainer = document.createElement('div')
       specificationsContainer.classList.add('product-specifications')
       productContainer.appendChild(specificationsContainer)
-
+    
       const specifications = document.createElement('span')
-      specifications.textContent = `${product.unities}u, ${product.weight}${product.measurementWeight}`
+      specifications.textContent = `${product.units}u, ${product.measurement}${product.measurementUnit}`
       specificationsContainer.appendChild(specifications)
-
+    
       const plusMinusContainer = document.createElement('div')
       plusMinusContainer.classList.add('plus-minus-container')
       productContainer.appendChild(plusMinusContainer)
-
+    
       let plusMinusButton = document.createElement('div')
       plusMinusButton.classList.add('plus-minus-button')
       plusMinusContainer.appendChild(plusMinusButton)
-
+    
       const minusButton = document.createElement('button')
       minusButton.textContent = '-'
       plusMinusButton.appendChild(minusButton)
-
+    
       const plusMinusQuantity = document.createElement('div')
       plusMinusQuantity.classList.add('plus-minus-quantity')
       plusMinusContainer.appendChild(plusMinusQuantity)
-
+    
       const quantity = document.createElement('span')
       quantity.textContent = '0'
       plusMinusQuantity.appendChild(quantity)
-
+    
       plusMinusButton = document.createElement('div')
       plusMinusButton.classList.add('plus-minus-button')
       plusMinusContainer.appendChild(plusMinusButton)
-
+    
       const plusButton = document.createElement('button')
       plusButton.textContent = '+'
       plusMinusButton.appendChild(plusButton)
@@ -195,7 +183,6 @@ class Products extends HTMLElement {
         const plusButton = event.target.closest('.plus-minus-button button').textContent === '+'
         const minusButton = event.target.closest('.plus-minus-button button').textContent === '-'
 
-        // Obtén el elemento que muestra la cantidad
         const quantityElement = clickedProduct.querySelector('.plus-minus-quantity span')
 
         if (plusButton) {
@@ -209,7 +196,6 @@ class Products extends HTMLElement {
 
         const matchingDataCopy = Object.assign({}, matchingData)
 
-        // Actualiza la propiedad quantity en la copia de matchingData con el nuevo valor
         matchingDataCopy.quantity = parseInt(quantityElement.textContent)
 
         store.dispatch(updateCart(matchingDataCopy))

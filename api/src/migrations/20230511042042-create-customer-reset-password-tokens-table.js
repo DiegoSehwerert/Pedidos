@@ -3,31 +3,27 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('companies', {
+    await queryInterface.createTable('customer_reset_password_tokens', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      commercialAddress: {
-        type: Sequelize.STRING,
-        allowNull: true
+      customerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
-      fiscalAddress: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      commercialName: {
+      token: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      fiscalName: {
-        type: Sequelize.STRING,
+      expirationDate: {
+        type: Sequelize.DATE,
         allowNull: false
       },
-      vatNumber: {
-        type: Sequelize.STRING,
+      used: {
+        type: Sequelize.BOOLEAN,
         allowNull: false
       },
       createdAt: {
@@ -42,9 +38,13 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+
+    await queryInterface.addIndex('customer_reset_password_tokens', ['customerId'], {
+      name: 'customer_reset_password_tokens_customerId'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('companies')
+    await queryInterface.dropTable('customer_reset_password_tokens')
   }
 }

@@ -23,6 +23,7 @@ exports.findAll = async (req, res) => {
 
   try {
     const result = await Customer.findAll({ // Cambiado de 'find' a 'findAll'
+      attributes: ['id', 'name','email', 'createdAt', 'updatedAt'],
       where: req.query, // Sequelize usa 'where' para las consultas
       offset: offset,
       limit: limit,

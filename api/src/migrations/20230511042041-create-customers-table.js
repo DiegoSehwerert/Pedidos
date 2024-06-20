@@ -1,32 +1,18 @@
-'use strict'
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('companies', {
+    await queryInterface.createTable('customers', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      commercialAddress: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      fiscalAddress: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      commercialName: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      fiscalName: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      vatNumber: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -45,6 +31,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('companies')
+    await queryInterface.dropTable('customers')
   }
 }

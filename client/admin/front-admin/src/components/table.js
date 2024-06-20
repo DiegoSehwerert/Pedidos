@@ -203,53 +203,27 @@ class table extends HTMLElement {
 
       const tableDataUl = document.createElement('ul')
 
-      const tableDataLiEs = document.createElement('li')
-      const tableDataLiEn = document.createElement('li')
-
-      const tableDataLiSpanEs = document.createElement('span')
-      const tableDataLiSpanEn = document.createElement('span')
-
-      const tableDataEsContainer = document.createElement('div')
-      tableDataEsContainer.className = 'table-data-es-container'
-
-      const tableDataEnContainer = document.createElement('div')
-      tableDataEnContainer.className = 'table-data-en-container'
-
-      const tableDataEsQuestion = document.createElement('div')
-
-      tableDataEsQuestion.textContent = `Nombre: ${row.name}`
-
-      const tableDataEsAnswer = document.createElement('div')
-      tableDataEsAnswer.textContent = `Apellidos: ${row.surname}`
-
-      const tableDataEnQuestion = document.createElement('div')
-      tableDataEnQuestion.textContent = `Email: ${row.email}`
-
-      const tableDataEnAnswer = document.createElement('div')
-      tableDataEnAnswer.textContent = `Telefono: ${row.telephone}`
-
-      tableDataEsContainer.appendChild(tableDataEsQuestion)
-      tableDataEsContainer.appendChild(tableDataEsAnswer)
-
-      tableDataEnContainer.appendChild(tableDataEnQuestion)
-      tableDataEnContainer.appendChild(tableDataEnAnswer)
-
-      tableDataLiEs.appendChild(tableDataLiSpanEs)
-      tableDataLiEs.appendChild(tableDataEsContainer)
-
-      tableDataLiEn.appendChild(tableDataLiSpanEn)
-      tableDataLiEn.appendChild(tableDataEnContainer)
-
-      tableDataUl.appendChild(tableDataLiEs)
-      tableDataUl.appendChild(tableDataLiEn)
-
+      for (let key in row.dataValues) {
+        if (row.dataValues.hasOwnProperty(key) && key !== 'id') {
+          const tableDataLi = document.createElement('li')
+          const tableDataContainer = document.createElement('div')
+          tableDataContainer.className = `table-data-${key}-container`
+    
+          const tableDataQuestion = document.createElement('div')
+          tableDataQuestion.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${row.dataValues[key]}`
+    
+          tableDataContainer.appendChild(tableDataQuestion)
+          tableDataLi.appendChild(tableDataContainer)
+          tableDataUl.appendChild(tableDataLi)
+        }
+      }
+    
       tableData.appendChild(tableDataUl)
-
       tableRecord.appendChild(tableRecordButtons)
       tableRecord.appendChild(tableData)
       tableRecordButtons.appendChild(editButton)
       tableRecordButtons.appendChild(deleteButton)
-
+    
       this.shadow.querySelector('.table-records').appendChild(tableRecord)
     })
     const tableSection = this.shadow.querySelector('.table')

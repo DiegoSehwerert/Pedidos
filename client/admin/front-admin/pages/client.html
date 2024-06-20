@@ -1,0 +1,13 @@
+<header-component>
+  <title-component title="Clientes"></title-component>
+  <title-menu></title-menu>
+</header-component>
+<main-component>
+  <filter-component></filter-component>
+  <modal-destroy-component endpoint="/api/admin/users"></modal-destroy-component>
+  <crud-component>
+      <table-component slot="table" endpoint="/api/admin/users"></table-component>
+      <client-form-component slot="form" endpoint="/api/admin/users"></client-form-component>
+  </crud-component>
+  <save-modal-component></save-modal-component>
+</main-component>

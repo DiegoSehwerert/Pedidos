@@ -40,6 +40,7 @@ app.use(session({
 
 const corsOptions = {
   origin: ['dev-pedidos.com'],
+  credentials: true
 }
 
 app.use(cors(corsOptions))

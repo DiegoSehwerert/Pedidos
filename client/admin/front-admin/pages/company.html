@@ -1,0 +1,13 @@
+<header-component>
+  <title-component title="Compañia"></title-component>
+  <title-menu></title-menu>
+</header-component>
+<main-component>
+  <filter-component></filter-component>
+  <modal-destroy-component endpoint="/api/admin/company"></modal-destroy-component>
+  <crud-component>
+      <table-component slot="table" endpoint="/api/admin/company"></table-component>
+      <company-form-component slot="form" endpoint="/api/admin/company"></company-form-component>
+  </crud-component>
+  <save-modal-component></save-modal-component>
+</main-component>
