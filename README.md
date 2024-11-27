@@ -4,7 +4,7 @@ Welcome to **Pedidos**, the web application that proves you don’t need a fancy
 
 ## 💡 **Project Description**  
 
-This project demonstrates how a true coding **gigachad** can achieve greatness with nothing but JavaScript, a keyboard, and an iron will. Here's what it can do:  
+This project demonstrates how a true coding **chadd** can achieve greatness with nothing but JavaScript, a keyboard, and an iron will. Here's what it can do:  
 
 - 📍 **Efficient routing** without relying on Next.js or any other crutch.  
 - 📸 **Image resizing and optimization** done directly in the browser—no libraries holding your hand.  
@@ -15,4 +15,4 @@ This project demonstrates how a true coding **gigachad** can achieve greatness w
 
 ---
 
-Why use a framework when you can achieve the same and more with pure JavaScript? In this project, frameworks are optional; **being awesome is mandatory**.  
+Why use a framework when you can achieve the same and more with pure JavaScript? 
